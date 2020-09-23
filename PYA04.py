@@ -1,4 +1,5 @@
 import random
+import time
 
 nums = []
 
@@ -10,7 +11,7 @@ def method1():
 
 def method2():
     forward_max = 0
-    forward_curr = 1
+    forward_curr = 4
     idx_f_max = 0
     idx_f_curr = 0
 
@@ -52,15 +53,33 @@ def method2():
     return total
 
 
-for i in range(1000):
-    nums.append(random.randint(-10, 10))
+nums = []
+def init():
+    global nums
+    nums = []
+    for i in range(10):
+        nums.append(random.randint(-100, 100))
+
 # nums=[9, -7, -8, 3, 9, 3, -2, 9, -9, -8]
 # nums=[10, -1, 9, -1, -8, 0, 8, -6, 10, 4]
 # nums = [5, -3, -6, -4, -3, -4, -2, 0, -2, -3]
 # bug 
-# [2, -6, 8, 2, 3, -8, -8, -10, 6, 10]
-# [-9, 3, 9, -7, -6, -4, 1, -8, 9, 9]
-print(nums)
-print(method1())
-print(method2())
+# 2, -6, 8, 2, 3, -8, -8, -10, 6, 10
+# -9, 3, 9, -7, -6, -4, 1, -8, 9, 9
+
+def race(func):
+    start = time.time()
+    ret = func()
+    return ret, time.time() - start
+
+fail = 0
+for i in range(1000):
+    init()
+    ret, t = race(method1)
+    ret2, t2 = race(method2)
+    if ret != ret2:
+        print(nums)
+        print(ret, ret2)
+
+print(fail/10)
         
