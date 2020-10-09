@@ -13,11 +13,9 @@ print_arr(int *arr, int len) {
 void
 bubble_sort(int *arr, int len) {
     int change = 1;
-    int len1 = len;
     while (len --> 0 && change) {
         change = 0;
         for (size_t j = 0; j < len; ++j) {
-            print_arr(arr, len1);
             if (arr[j] > arr[j+1]) {
                 int tmp = arr[j];
                 arr[j] = arr[j+1];
@@ -63,14 +61,14 @@ void
 merge(int *arr, int a, int b, int c, int *out) {
     int i, j, k;
 
-    i = a, j = b;
-    for (k = a; k < c; k++) {
-        if (i < b && (j>=c || arr[i] <= arr[j])) {
-            out[k] = arr[i];
-            i = i + 1;
-        } else {
-            out[k] = arr[j];
+    j = a, k = b;
+    for (i = a; i < c; i++) {
+        if (j < b && (k>=c || arr[j] <= arr[k])) {
+            out[i] = arr[j];
             j = j + 1;
+        } else {
+            out[i] = arr[k];
+            k = k + 1;
         }
     }
 }
@@ -79,7 +77,7 @@ void
 _merge_sort(int *arr, int a, int c, int *out) {
     if (c-a <= 1)
         return;
-    int b = (c + a) / 2;              // iMiddle = mid point
+    int b = (c + a) / 2;              // imiddle = mid point
     _merge_sort(out, a, b, arr);
     _merge_sort(out, b, c, arr);
     merge(arr, a, b, c, out);
@@ -88,25 +86,22 @@ _merge_sort(int *arr, int a, int c, int *out) {
 void
 merge_sort(int *arr, int *out, int len) {
     memcpy(out, arr, len * sizeof(arr[0]));
-    _merge_sort(out, 0, len, arr);
+    _merge_sort(arr, 0, len, out);
 }
 
-void TopDownMergeSort(int A[], int B[], int n)
-{
-    memcpy(B, A, n * sizeof(A[0]));
-    _merge_sort(B, 0, n, A);   // sort data from B[] into A[]
+void gen_rand(int *arr, int len) {
+    for (size_t i = 0; i < len; ++i) {
+        arr[i] = rand() % 100;
+    }
 }
-
 int
 main(int argc, char **argv) {
-    //int arr[] = {2,4,1,5,3};
-    int arr[] = {45, 9};
-    //int arr[] = {1,2,3,6,5};
-    int len = sizeof(arr) / sizeof(arr[0]);
-    int out[100] = {0};
+    int len = 30000;
+    int *arr = (int *)malloc(len * sizeof(int));
+    int *out = (int *)malloc(len * sizeof(int));
+    gen_rand(arr, len);
     merge_sort(arr, out, len);
-    printf("--------\n");
-    print_arr(arr, len);
     print_arr(out, len);
+    free(arr);
     return 0;
 }
