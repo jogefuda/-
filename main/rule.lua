@@ -2,8 +2,10 @@ local awful = require("awful")
 local beautiful = require("beautiful")
 
 local naughty = require("naughty")
+
+-- {{{ Rule
 -- Rules to apply to new clients (through the "manage" signal).
-function get(clientkeys)
+function get(clientkeys, clientbuttons)
     local rule = {
         -- All clients will match this rule.
         { rule = { },
@@ -60,8 +62,10 @@ function get(clientkeys)
 
     return rule
 end
+-- }}}
 
 return setmetatable(
     {},
     {__call = function(_, ...) return get(...) end}
 )
+

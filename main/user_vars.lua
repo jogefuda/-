@@ -1,3 +1,4 @@
+-- {{{ Variable definitions
  local vars = {
     -- Default modkey.
     -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -6,10 +7,12 @@
     -- However, you can use another modifier like Mod1, but it may interact with others.
     modkey = "Mod4",
 
-    -- application
+    -- Standard application
     terminal = "terminator",
 
 }
+
+-- }}}
 
 return vars
 

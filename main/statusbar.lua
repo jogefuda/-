@@ -6,6 +6,8 @@ local wibox = require("wibox")
 -- {{{ Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock()
+-- Keyboard map indicator and switcher
+mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- Create a wibox for each screen and add it
 local taglist_buttons = gears.table.join(
@@ -67,7 +69,7 @@ awful.screen.connect_for_each_screen(function(s)
     set_wallpaper(s)
 
     local layout = require("main.layout")
-    awful.layout.layouts = layout()
+    awful.layout.layouts = layout
     -- Each screen has its own tag table.
     awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
 
@@ -119,3 +121,4 @@ awful.screen.connect_for_each_screen(function(s)
 end)
 
 -- }}}
+

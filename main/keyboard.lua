@@ -4,9 +4,10 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 local menubar = require("menubar")
 
 local modkey = RC.vars.modkey
+local terminal = RC.vars.terminal
 
 -- {{{ Key bindings
-globalkeys = gears.table.join(
+local global_keys = gears.table.join(
     awful.key({ modkey,           }, "s",      hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
     awful.key({ modkey,           }, "Left",   awful.tag.viewprev,
@@ -111,22 +112,22 @@ globalkeys = gears.table.join(
     awful.key({ modkey }, "r", function () awful.screen.focused().mypromptbox:run() end,
               {description = "run prompt", group = "launcher"}),
 
-              --awful.key({ modkey }, "x",
-              --          function ()
-              --              awful.prompt.run {
-              --                prompt       = "Run Lua code: ",
-              --                textbox      = awful.screen.focused().mypromptbox.widget,
-              --                exe_callback = awful.util.eval,
-              --                history_path = awful.util.get_cache_dir() .. "/history_eval"
-              --              }
-              --          end,
-              --          {description = "lua execute prompt", group = "awesome"}),
+              awful.key({ modkey }, "x",
+                        function ()
+                            awful.prompt.run {
+                              prompt       = "Run Lua code: ",
+                              textbox      = awful.screen.focused().mypromptbox.widget,
+                              exe_callback = awful.util.eval,
+                              history_path = awful.util.get_cache_dir() .. "/history_eval"
+                            }
+                        end,
+                        {description = "lua execute prompt", group = "awesome"}),
     -- Menubar
     awful.key({ modkey }, "p", function() menubar.show() end,
               {description = "show the menubar", group = "launcher"})
 )
 
-clientkeys = gears.table.join(
+local client_keys = gears.table.join(
     awful.key({ modkey,           }, "f",
         function (c)
             c.fullscreen = not c.fullscreen
@@ -176,7 +177,7 @@ clientkeys = gears.table.join(
 -- Be careful: we use keycodes to make it work on any keyboard layout.
 -- This should map on the top row of your keyboard, usually 1 to 9.
 for i = 1, 9 do
-    globalkeys = gears.table.join(globalkeys,
+    global_keys = gears.table.join(global_keys,
         -- View tag only.
         awful.key({ modkey }, "#" .. i + 9,
                   function ()
@@ -221,24 +222,10 @@ for i = 1, 9 do
                   {description = "toggle focused client on tag #" .. i, group = "tag"})
     )
 end
-
-clientbuttons = gears.table.join(
-    awful.button({ }, 1, function (c)
-        c:emit_signal("request::activate", "mouse_click", {raise = true})
-    end),
-    awful.button({ modkey }, 1, function (c)
-        c:emit_signal("request::activate", "mouse_click", {raise = true})
-        awful.mouse.client.move(c)
-    end),
-    awful.button({ modkey }, 3, function (c)
-        c:emit_signal("request::activate", "mouse_click", {raise = true})
-        awful.mouse.client.resize(c)
-    end)
-)
 -- }}}
 
 return {
-    globalkey = globalkeys,
-    clientkey = clientkeys
+    global = global_keys,
+    client = client_keys
 }
 
