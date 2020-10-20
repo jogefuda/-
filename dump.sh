@@ -3,8 +3,6 @@ SUDO=sudo
 MOUNTPOINT=/mnt
 DEVICE=/dev/sr0
 
-
-
 # utils
 function to_sec {
     IFS=':' read -r h m s <<<"$1"
@@ -27,6 +25,14 @@ function wait_until_inject {
 
 function unmount_cdrom {
     umount $DEVICE
+    eject
+}
+
+function copy_vob {
+    local info=$(lsdvd -c "$MOUNTPOINT" 2>/dev/null)
+    local longest=$(echo "${info}" | awk '/^Longest/{print $3}' )
+    local files=$(find "$MOUNTPOINT/VIDEO_TS" -not -path "$MOUNTPOINT/VIDEO_TS" -name "VTS_${longest}_*.VOB")
+    cp -u -v $files /tmp
 }
 
 function get_segment_info {
@@ -51,11 +57,15 @@ function get_segment_info {
     ')
 
     local accu=0
+    local ret=''
     for time in $chapter_length; do
         local sec=$(to_sec $time)
         accu=$(echo "$accu + $sec" | bc)
-        echo -n $accu,
+        ret+=${accu},
     done
+    echo ${ret:0:-1}
 }
 
-get_segment_info
+#get_segment_info
+copy_vob
+
